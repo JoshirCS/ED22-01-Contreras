@@ -1,1 +1,1 @@
-# ED22-01-Contreras
+# Proyecto: Detección y reidentificación de caras en secuencias de imágenes o video
