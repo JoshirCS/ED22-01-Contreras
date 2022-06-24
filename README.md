@@ -3,5 +3,6 @@
 ## Integrantes
 - Joshir Contreras Segovia () 
 ## Bitacora
+[Ver Bitácora](docs/BITACORA.md)
 ## Resumen
 ## Documentos
