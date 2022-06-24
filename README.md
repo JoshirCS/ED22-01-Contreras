@@ -3,6 +3,6 @@
 ## Integrantes
 - Joshir Contreras Segovia () 
 ## Bitacora
-[Ver Bitácora](docs/BITACORA.md)
+[Ver Bitácora](https://github.com/JoshirCS/ED22-01-Contreras/blob/main/docs/Bitacora.md)
 ## Resumen
 ## Documentos
