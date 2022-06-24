@@ -1,3 +1,4 @@
+[https://github.com/JoshirCS/ED22-01-Contreras/blob/main/docs/imagenes/60x60-ucn-negro.png]
 # Proyecto: Detección y reidentificación de caras en secuencias de imágenes o video
 ## Curso: Estructura de datos
 ## Integrantes
