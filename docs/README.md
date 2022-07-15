@@ -175,7 +175,7 @@ cout<<"\n"<<"===================================================================
 cout<<"\n"<<" Velocidad de personas que entraron (Zona derecha): "<< EntradaHora <<"\n";
 cout<<"\n"<<"=============================================================================="<<"\n";
 ```
-Aquí calculamos la hora inicial a la que se ejecuta el programa y luego la ejecucion del requerimiento, se restan las horas y los minutos para luego dividir con respecto a la cantidad de personas que salieron y la cantidad de personas que entraron.
+Aquí calculamos la hora inicial a la que se ejecuta el programa y luego la ejecucion del requerimiento, se restan las horas y los minutos para luego dividir con respecto a la cantidad de personas que salieron y la cantidad de personas que entraron. Esto proporciona la cantidad de personas que entran en una hora, segun las imagenes y el tiempo transcurrido.
 
 - Imagenes a analizar
 
