@@ -181,20 +181,37 @@ Aquí calculamos la hora inicial a la que se ejecuta el programa y luego la ejec
 
 Este parametro es para el administrador, en donde el podra elegir cuales imagenes deseea cargar en el programa para que el guardia pueda ejecutar los requerimientos necesarios.
 ```c++
-
-Aqui falta.
-
+cout<<"\n"<<"\nEscoja la carpteta que desee ser analizada: .";
+                cout<<"\n"<<"\n1.Carpeta01 .";
+                cout<<"\n"<<"\n2.Carpeta02 .";
+                cin>>res;
+                if(res == 1){
+                    imagesStr->push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image1679.png");
+                    imagesStr->push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image1680.png");
+                    imagesStr->push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image0292.png");
+                    imagesStr->push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image0293.png");
+                    cond=false;
+                    cond1=false;
+                    
+                }else if(res ==2){
+                    imagesStr->push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta02/image1679.png");
+                    imagesStr->push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta02/image1680.png");
+                    cond1=false;
+                    cond=false;
+                }
 ```
+
+Se le da la opcion al administrador de cargar la carpeta que el desee, para que el guardia pueda implementar analizar y realizar las operaciones que el desee.
 
 ## 3. Resultados Obtenidos
 
 Una vez cargado el código nos arroja las imágenes presentadas como ejemplo,encapsuladas en los rectángulos rojos y también el calculo de la cantidad de personas que entran y salen en el total de imágenes.
 
-![imagen](https://github.com/JoshirCS/ED22-01-Contreras/blob/main/docs/imagenes/referencias/e2.jpg) ![consola](https://github.com/JoshirCS/ED22-01-Contreras/blob/main/docs/imagenes/referencias/consola.jpg)
+![imagen](https://github.com/JoshirCS/ED22-01-Contreras/blob/main/docs/imagenes/referencias/e2.jpg) 
 
 ## 4. Conclusiones
 
-Analizando lo realizado, se da cuenta de que no todos los objetivos se completaron de la mejor manera posible, teniendo muchas mejoras en la realización y organización de este proyecto. Lo positivo es la buena interacción con la IDE y la librería OpenCV, lo cual sirve como experiencia y aprender mas sobre el manejo de otro tipo de lenguaje que en el mundo laboral me servirá para afrontar cualquier tipo de desafíos relacionados a la lectura de Personas.
+Analizando el trabajio realizado, se da cuenta de que los objetivos se cumplen en su totalidad, si bien, tiene muchas mejoras en la realizacion de este codigo, pudiendo optimizarlo de una mejor manera, se logra una buena organizacion con los tiempos estimados y un buen desarrollo de este trabajo. Ademas se presenta una uena interacción con la IDE y la librería OpenCV, lo cual sirve como experiencia y aprender mas sobre el manejo de otro tipo de lenguaje que en el mundo laboral me servirá para afrontar cualquier tipo de desafíos relacionados a la lectura de Personas.
 
 # Anexos
 
