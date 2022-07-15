@@ -60,8 +60,7 @@ Configurando la IDE con OpenCV se podrá implementar de buena manera las librer�
 
 - Clase Detector: Sirve para detectar las personas dentro la imagen y generar el cuadrado que encapsula a dicho elemento.
 - Clase Persona: Guarda los datos de los puntos elementales a la figura generada en la clase Detector, ademas calcula el centro dela figura.
-- Clase NodoPersona: Sirve para guardar a las personas y así poder agregarlas a una linkedList.
-- Clase ListaPersonas: Guarda los elementos de NodoPersona y realiza la implementación de diferenciar las personas.
+- Clase ArbolABB: Sirve para guardar la coordenada del centro de la figura creada en la clase Persona, teniendo como raiz el centro de la particion de la imagen, podiendo completar asi el arbol con las entradas a la derecha y las salidas a la izquierda.
 
 ### 2.3 Implementación
 
@@ -99,27 +98,63 @@ line(imagen, p1, p2, Scalar(255, 255, 0), thickness, LINE_8);
 ```
 Con esta función podemos identificar en cada imagen cuantas personas se encuentran en el lado izquierdo (Salida) y derecho (Entrada), así podemos calcular los requerimientos necesarios.
 
-- Entrada y Salida
+- Creación Arbol Binario de Busqueda
 
-Dentro de este punto, según la linea marcada en el punto anterior, podemos identificar si la persona se encuentra en al entrada y salida, mediante un contador vamos realizando el calculo total de dicha problemática. En el siguiente código se puede ver la implementación:
+Se crea un ABB para poder almacenar la coordenada del centro de las personas detectadas, en donde se agregara en la raiz la coordenada de la mitad de la imagen, y dependiendo de donde estaran las personas identificadas se agregaran en el arbol, a continuacion se muestra ek codigo del Arbol:
 
 ```c++
-int contSalida=0;
-int contEntrada=0;
-...
-...
-if( p.getXCentro() < p1.x){
-    contSalida++;
-}else{
-    contEntrada++;
+class ArbolABB{
+    private:
+        class Nodo{
+            public:
+                Nodo(const int dat, Nodo *izquierdo=nullptr, Nodo *derecho=nullptr) :
+                    dato(dat), izq(izquierdo), der(derecho) {}
+                    int dato;
+                    Nodo *izq;
+                    Nodo *der;
+        };
+        Nodo *raiz;
+        Nodo *actual;
+        int contador;
+    public:
+        ArbolABB() : raiz(nullptr), actual(nullptr) {}
+        void Insertar(const int dato);
+        bool Vacio(Nodo *r) { return r==nullptr; }
+        int NumeroNodosIzq();
+        int NumeroNodosDer();
+        void auxContador(Nodo *nodo);
+        
+};
+```
+implementando los metodos correctos podemos calcular los requerimientos que se nos piden.
+
+- Entrada y Salida 
+
+Dentro de este punto, según el arbol binario mencionado con anterioridad, los nodos que se encuentran en el lado izquierdo de la raiz seran de salida y en el lado derecho la entrada. En el siguiente código se puede ver la implementación del calculo de los hijos izquieros y derechos del arbol:
+
+```c++
+int ArbolABB::NumeroNodosIzq(){
+    contador = 0;
+    auxContador(raiz->izq);
+    return contador;
+}
+void ArbolABB::auxContador(Nodo *nodo){
+    contador++;
+    if(nodo->izq) auxContador(nodo->izq);
+    if(nodo->der) auxContador(nodo->der);
+}
+int ArbolABB::NumeroNodosDer(){
+    contador = 0;
+    auxContador(raiz->der);
+    return contador;
 }
 ```
 
-Su principal función es calcular mediante el centro de la persona, si este centro es menor a la distancia a la que se encuentra la linea, suma al contador de salida, de ser mayor, suma al contador de entrada, todo esto tomando el eje X de ambos objetos.
+Con esto podemos calcular la cantidad de personas que se encuentran una funcion que recorre el arbol por su parte izquierda y tambien una funcion que recorre su parte derecha, teniendo una funcion auxiliar que servira para recorrer y sumar la cantidad de hijos que se presentan en cada lado respectivo.
 
 - Velocidad Persona por Hora
 
-Dentro de este parámetro se utiliza la librería de C++ e implementamos ctime, para poder calcular la hora de inicio del programa y el final. Se presenta en el siguiente código:
+Dentro de este parámetro se utiliza la librería de C++ e implementamos ctime, para poder calcular la hora de inicio del programa y la hora en la que se pide este requerimiento. Se presenta en el siguiente código:
 
 ```c++
 time_t TiempoInicio = time(0);
@@ -134,17 +169,22 @@ time_t TiempoFinal = time(0);
 tm *ltme = localtime(&TiempoFinal);
 int HoraFinal = ltme->tm_hour;
 int MinutoFinal = ltme->tm_min;
-
 double MinutosTranscurridos = (double)(HoraFinal-HoraInicio) + (double)(MinutoFinal - MinutoInicio)/60;
-double EntradaHora = ((double)contEntrada / MinutosTranscurridos);
-double SalidaHora = ((double)contSalida / MinutosTranscurridos);
+double EntradaHora = ((double)arbol.NumeroNodosDer() / MinutosTranscurridos);
+cout<<"\n"<<"==============================================================================="<<"\n";
+cout<<"\n"<<" Velocidad de personas que entraron (Zona derecha): "<< EntradaHora <<"\n";
+cout<<"\n"<<"=============================================================================="<<"\n";
 ```
-Aquí calculamos la hora inicial a la que se ejecuta el programa y luego la de termino, se restan las horas y los minutos para luego dividir con respecto a la cantidad de personas que salieron y la cantidad de personas que entraron.
+Aquí calculamos la hora inicial a la que se ejecuta el programa y luego la ejecucion del requerimiento, se restan las horas y los minutos para luego dividir con respecto a la cantidad de personas que salieron y la cantidad de personas que entraron.
 
-- Diferenciación 
+- Imagenes a analizar
 
-Dentro de esta sección no se pudo completar, la lógica para realizar esto era en una primera instancia, crear la listaPersonas, verificar si esta lista estaba vacía, de ser así se agregarían las personas encontradas en la primera imagen. Posterior a esto, se volviera a preguntar a si la lista estaba vacía, en este momento no lo estaría, por eso se compararía cada dato actual con los datos de la lista para buscar la menor distancia, la complicación fue el tema de la LinkedList y la distancia máxima de separación, así para saber si la persona mas cercana corresponde de verdad a esa, y no lo asociamos solo por el menor.
-De igual forma en el main.cpp se ve el avance de esta problemática, la cual esta de forma comentada para no ocasionar inconvenientes con la otra parte del código.
+Este parametro es para el administrador, en donde el podra elegir cuales imagenes deseea cargar en el programa para que el guardia pueda ejecutar los requerimientos necesarios.
+```c++
+
+Aqui falta.
+
+```
 
 ## 3. Resultados Obtenidos
 
