@@ -1,1 +1,1 @@
-# Imagenes relacionadas a la detección de personas
+# Imagenes relacionadas a la redacción del informe.
