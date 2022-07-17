@@ -8,7 +8,7 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 
-add_executable(taller Persona.cpp Detector.cpp main.cpp)
+add_executable(taller ArbolABB.cpp Persona.cpp Detector.cpp main.cpp)
 
 
 target_link_libraries( taller ${OpenCV_LIBS} )
@@ -16,3 +16,4 @@ target_link_libraries( taller ${OpenCV_LIBS} )
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+ 
