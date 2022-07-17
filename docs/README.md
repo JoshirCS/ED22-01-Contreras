@@ -6,7 +6,7 @@
 Joshir Contreras 
 ## Resumen
 
-El taller al que damos inicio nos encomendamos en generar un sistema de vigilancia en base al reconocimiento de personas. Para esta entrega se pide un programa con la ayuda de la biblioteca OpenCV en donde debemos detectar las personas que se presenten en un conjunto de imágenes, vídeo o algún tipo de cámara, marcando a estas personas en rectángulos de color rojo y también identificando el centro de esta figura con el objetivo de que un guardia pueda acceder a los datos recopilados por nuestro programa. Para lograr la realización de este taller, se instalo la IDE Visual Studio Code junto con OpenCV y CMake, usando las librerías de dichos programas para poder reconocer a las personas. Luego de investigar, se logra implementar de buena forma y con imágenes de referencias realizamos las pruebas obteniendo éxito.
+El taller al que damos inicio nos encomendamos en generar un sistema de vigilancia en base al reconocimiento de personas. Para esta entrega se pide un programa con la ayuda de la biblioteca OpenCV en donde debemos detectar las personas que se presenten en un conjunto de imágenes, vídeo o algún tipo de cámara, marcando a estas personas en rectángulos de color rojo y también identificando el centro de esta figura con el objetivo de que el usuario pueda acceder a los datos recopilados por nuestro programa. Para lograr la realización de este taller, se instalo la IDE Visual Studio Code junto con OpenCV y CMake, usando las librerías de dichos programas para poder reconocer a las personas. Luego de investigar, se logra implementar de buena forma y con imágenes de referencias realizamos las pruebas obteniendo éxito.
 
 ## 1. Introducción
 
