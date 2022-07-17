@@ -9,40 +9,15 @@
 
 #include "Detector.hpp"
 #include "Persona.hpp"
-//#include "ListaPersonas.hpp"
-//#include "NodoPersona.hpp"
+#include "ArbolABB.hpp"
 
 using namespace cv;
 using namespace std;
-
-int main(int argc, char** argv )
-{   
-    //ListaPersonas<NodoPersona<Persona>> listaP;
-
-    time_t TiempoInicio = time(0);
-    tm *ltm = localtime(&TiempoInicio);
-    int HoraInicio = ltm->tm_hour;
-    int MinutoInicio = ltm->tm_min;
-
-    Detector detector;
-    Mat imagen;
-
-    vector<String>imagesStr;
-
-    imagesStr.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/imagenes/image1679.png");
-    imagesStr.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/imagenes/image1680.png");
-    imagesStr.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/imagenes/image0292.png");
-    imagesStr.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/imagenes/image0293.png");
-    
-    //variable de contador salida y entrada;
-    int contSalida=0;
-    int contEntrada=0;
-
-    //variable de id, la cual se le asignara a cada persoan que ingrese a la listaPersonas
-    int id=0;
-
-
-    cout << "imgesStr = {";
+/*
+    Funcion que sirve para cargar las imagenes que son analizadas, desplegandolas por pantalla con el rectangulo y el punto identificando a las personas.  
+*/
+void MostrarImagenes(vector<string>imagesStr,vector<string>*imagenes, Mat imagen,Detector detector){
+     cout << "imgesStr = {";
     for (string n:imagesStr)
     {
         cout<<n<<",";
@@ -65,52 +40,218 @@ int main(int argc, char** argv )
         for (vector<Persona>::iterator i = found.begin(); i != found.end(); ++i)
         {
             Persona &p = *i;
-            /*
-            //se crea el nodo persona.
-            NodoPersona<Persona> NP(p,id,0);
-            
-            //se agregan las personas al nodo.
-            if(listaP.isEmpty()){
-                listaP.add_primero(NP);
-                listaP.print();
-                id++;
-            }else{
 
-            }
-            */
-
-            cout << "(" << p.getXInicio() << ", "<< p.getYInicio() << ")" << endl;
             rectangle(imagen, cv::Point(p.getXInicio(), p.getYInicio()), cv::Point(p.getXFin(), p.getYFin()), cv::Scalar(0,0,255), 2);
             circle(imagen, cv::Point(p.getXCentro(), p.getYCentro()), 3, cv::Scalar(0, 0, 255), 2);
-            //circle(imagen, cv::Point(p.getXInicio(), p.getYInicio()), 3, cv::Scalar(255, 0, 0), 2);
-            //circle(imagen, cv::Point(p.getXFin(), p.getYFin()), 3, cv::Scalar(0, 255, 255), 2);
-
-            //Se empieza a contar cuantas personas entran y salen dependiendo de la posicion en la que se encuentren en la imagen
-            if( p.getXCentro() < p1.x){
-                contSalida++;
-            }else{
-                contEntrada++;
-            }
         }
-        imshow("People detector", imagen);
+        imshow("Detector Personas", imagen);
         waitKey(0);
         
     }
-    time_t TiempoFinal = time(0);
-    tm *ltme = localtime(&TiempoFinal);
-    int HoraFinal = ltme->tm_hour;
-    int MinutoFinal = ltme->tm_min;
+}
+/*
+    Funcion que sirve para cargar el Arbol Binadrio de Busqueda con los centros de las personas, que son analizadas mediante el detector.
+    Retornara el arbol cargado de personas.
+*/
+ArbolABB CargarArbol(ArbolABB arbol, vector<string>imagesStr,vector<string>*imagenes, Mat imagen,Detector detector){
+    arbol.Insertar(175);
+    cout<< "imagesStr = {";
+    for(string n:imagesStr){
+        cout<<n<<",";
+    }
+    cout <<"};"<<endl;
 
-    int MinutosTranscurridos = (HoraFinal-HoraInicio)*60 + (MinutoFinal - MinutoInicio);
-    float EntradaHora = ((float)contEntrada / MinutosTranscurridos);
-    float SalidaHora = ((float)contSalida / MinutosTranscurridos);
+    for(string im:imagesStr){
+        imagen = imread(im);
+        detector.toggleMode();
+        cout << detector.modeName() <<endl;
 
-    //cout << "Hora y min inicio: " << HoraInicio << "," << MinutoInicio << endl;
-    //cout << "Hora y min final: " << HoraFinal << "," << MinutoFinal << endl;
-
-    cout << "Cantidad total de personas que entraron: " << contEntrada <<"\nCantidad total de personas que salieron: " << contSalida <<"\nVelocidad entrada promedio por hora: " << EntradaHora <<"\nVelocidad salida promedio por hora: "<< SalidaHora <<endl;
+        vector<Persona> found = detector.detect(imagen);
+        for(vector<Persona>::iterator i= found.begin(); i !=found.end(); i++){
+            Persona &p = *i;
+            arbol.Insertar(p.getXCentro());
+        }
+    }
     
+    return arbol;
+}
+/*
+    Funcion Menu administrador, en donde se cargaran las imagenes que seran analizadas en nuestro programa.
+    Retornara el vector con las imagenes seleccionadas.
+*/
+vector<string> MenuAdmin(vector<string> &imagesStr){
+    vector<string> imagenes;
+    int elec;
+    bool cond=true;
+    bool cond1=true;
+    while(cond){
+        cout<<"\n"<<"==============================================================================="<<"\n";
+	    cout<<"\n"<<"                               MENU DE ADMIN                                   "<<"\n";
+	    cout<<"\n"<<"==============================================================================="<<"\n";
+        cout<<"\n"<<"\n1.Obtener imagenes.";
+        cout<<"\n"<<"\n2.Salir.";
+        cout<<"\n"<<"\n"<<">>>>Estimado usuario digite el numero de la operacion a realizar: "; 
+        cin>>elec;
+        int res;
+        if(elec ==1){
+            while(cond1){
+                cout<<"\n"<<"\nEscoja la carpteta que desee ser analizada: .";
+                cout<<"\n"<<"\n1.Carpeta01 .";
+                cout<<"\n"<<"\n2.Carpeta02 .";
+                cin>>res;
+                if(res == 1){
+                    imagenes.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image1679.png");
+                    imagenes.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image1680.png");
+                    imagenes.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image0292.png");
+                    imagenes.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta01/image0293.png");
+                    cond=false;
+                    cond1=false;
+                    cout<<"==============================================================================="<<"\n";
+                    cout<<"\n"<<"             CARGADO CON EXITO, VOLVIENDO AL MENU PRINCIPAL              "<<"\n";
+                    cout<<"\n"<<"==============================================================================="; 
+                    
+
+                }else if(res ==2){
+                    imagenes.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta02/image1679.png");
+                    imagenes.push_back("C:/Users/JoshiR/workspace/Estructura datos/taller/Carpeta02/image1680.png");
+                    cond1=false;
+                    cond=false;
+                    cout<<"==============================================================================="<<"\n";
+                    cout<<"\n"<<"             CARGADO CON EXITO, VOLVIENDO AL MENU PRINCIPAL              "<<"\n";
+                    cout<<"\n"<<"===============================================================================";
+                }else{
+                    cout<<"==============================================================================="<<"\n";
+                    cout<<"\n"<<"             ESTIMADO USUARIO LA OPCION MARCADA ES INVALIDA                    "<<"\n";
+                    cout<<"\n"<<"==============================================================================="; 
+                }
+            }
+        }else if(elec ==2){
+            cout<<"==============================================================================="<<"\n";
+            cout<<"\n"<<"                    VOLVIENDO AL MENU PRINCIPAL                                 "<<"\n";
+            cout<<"\n"<<"==============================================================================="; 
+            cond=false;
+        }else{
+            cout<<"==============================================================================="<<"\n";
+            cout<<"\n"<<"             ESTIMADO USUARIO LA OPCION MARCADA ES INVALIDA                    "<<"\n";
+            cout<<"\n"<<"==============================================================================="; 
+        }
+    }
+    return imagenes;
+
+}
+/*
+    Funcion Menu de guardia, en donde se ejecutaran las opciones que vaya eligiendo el usuario. 
+*/
+void MenuGuardia(ArbolABB arbol, vector<string>imageStr,vector<string>*imagenes, Mat imagen,Detector detector,int HoraInicio, int MinutoInicio){
+    if(imageStr.empty()){
+        cout<<"\n"<<"==============================================================================="<<"\n";
+	    cout<<"\n"<<"          EL ADMINISTRADOR AUN NO CARGA ARCHIVOS PARA ANALIZAR                 "<<"\n";
+	    cout<<"\n"<<"==============================================================================="<<"\n";
+    }else{
+        int elec;
+        bool cond=true;
+        while(cond){
+            cout<<"\n"<<"==============================================================================="<<"\n";
+	        cout<<"\n"<<"                               MENU DE GUARDIA                                 "<<"\n";
+	        cout<<"\n"<<"==============================================================================="<<"\n";
+            cout<<"\n"<<"\n1.Ver la deteccion de personas.";
+            cout<<"\n"<<"\n2.Ver trafico de entrada.";
+            cout<<"\n"<<"\n3.Ver trafico de salida.";
+            cout<<"\n"<<"\n4.Ver la velocidad de entrada.";
+            cout<<"\n"<<"\n5.Ver la velocidad de salida.";
+            cout<<"\n"<<"\n6.Salir.";
+            cout<<"\n"<<"\n"<<">>>>Estimado usuario digite el numero de la operacion a realizar: "; 
+            cin>>elec;
+            if(elec ==1){
+                MostrarImagenes(imageStr,imagenes,imagen,detector);
+            }
+            else if(elec ==2){
+                cout<<"\n"<<"==============================================================================="<<"\n";
+	            cout<<"\n"<<" Cantidad de personas que entraron (Zona derecha): "<<arbol.NumeroNodosDer()<<"\n";
+	            cout<<"\n"<<"==============================================================================="<<"\n";
+            }
+            else if(elec ==3){
+                cout<<"\n"<<"==============================================================================="<<"\n";
+	            cout<<"\n"<<" Cantidad de personas que salieron (Zona Izquierda): "<<arbol.NumeroNodosIzq()<<"\n";
+	            cout<<"\n"<<"==============================================================================="<<"\n";
+            }
+            else if(elec ==4){
+                time_t TiempoFinal = time(0);
+                tm *ltme = localtime(&TiempoFinal);
+                int HoraFinal = ltme->tm_hour;
+                int MinutoFinal = ltme->tm_min;
+                double MinutosTranscurridos = (double)(HoraFinal-HoraInicio) + (double)(MinutoFinal - MinutoInicio)/60;
+                double EntradaHora = ((double)arbol.NumeroNodosDer() / MinutosTranscurridos);
+                cout<<"\n"<<"==============================================================================="<<"\n";
+	            cout<<"\n"<<" Velocidad de personas que entraron (Zona derecha) por hora: "<< EntradaHora <<"\n";
+	            cout<<"\n"<<"=============================================================================="<<"\n";
+            }
+            else if(elec ==5){
+                time_t TiempoFinal = time(0);
+                tm *ltme = localtime(&TiempoFinal);
+                int HoraFinal = ltme->tm_hour;
+                int MinutoFinal = ltme->tm_min;
+                double MinutosTranscurridos = (double)(HoraFinal-HoraInicio) + (double)(MinutoFinal - MinutoInicio)/60;
+                double SalidaHora = ((double)arbol.NumeroNodosIzq() / MinutosTranscurridos);
+                cout<<"\n"<<"==============================================================================="<<"\n";
+	            cout<<"\n"<<" Cantidad de personas que salieron (Zona Izquierda) por hora: "<<SalidaHora<<"\n";
+	            cout<<"\n"<<"==============================================================================="<<"\n";
+            }
+            else if(elec ==6){
+                cond=false;
+            }
+        }
+    }
+}
+/*
+    Funcion Menu, en donde se ejecutaran todo el programa y deplegara las opciones que puede ejecutar el usuario.
+*/
+void Menu(ArbolABB arbol, vector<string>imagesStr,vector<string>*imagenes, Mat imagen,Detector detector, int HoraInicio, int MinutoInicio){
+    int elec;
+    bool cond=true;
+    while(cond){
+         cout<<"\n"<<"==============================================================================="<<"\n";
+	    cout<<"\n"<<"                       IDENTIFICACION DE PERSONAS                              "<<"\n";
+	    cout<<"\n"<<"==============================================================================="<<"\n";
+        cout<<"\n"<<"\n1.Menu de Guardia.";
+        cout<<"\n"<<"\n2.Menu de Administrador.";
+        cout<<"\n"<<"\n3.Salir.";
+        cout<<"\n"<<"\n"<<">>>>Estimado usuario digite el numero de la operacion a realizar: "; 
+        cin>>elec;
+        if(elec == 1){
+            MenuGuardia(arbol,imagesStr,imagenes,imagen,detector,HoraInicio, MinutoInicio);
+        }
+        else if(elec == 2){
+            imagesStr = MenuAdmin(imagesStr);
+            arbol = CargarArbol(arbol,imagesStr,imagenes,imagen,detector);
+        }else if(elec == 3){
+            
+            exit(0);
+        }else{
+            cout<<"==============================================================================="<<"\n";
+            	   cout<<"\n"<<"             ESTIMADO USUARIO LA OPCION MARCADA ES INVALIDA                    "<<"\n";
+            	   cout<<"\n"<<"==============================================================================="; 
+        }
+    }
+}
+
+
+/*
+ Aqui comienza la ejecuccion del programa Identifiacion de personas.
+*/
+int main(int argc, char** argv )
+{
+    ArbolABB arbol;
+    vector<string>imagesStr;
+    vector<string>*imagenes = &imagesStr;
+    Mat imagen;
+    Detector detector;
+
+    time_t TiempoInicio = time(0);
+    tm *ltm = localtime(&TiempoInicio);
+    int HoraInicio = ltm->tm_hour;
+    int MinutoInicio = ltm->tm_min;
+
+    Menu(arbol,imagesStr,imagenes,imagen,detector, HoraInicio, MinutoInicio);
     return 0;
-    
 };
-
