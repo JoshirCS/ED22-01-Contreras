@@ -150,7 +150,7 @@ int ArbolABB::NumeroNodosDer(){
 }
 ```
 
-Con esto podemos calcular la cantidad de personas que se encuentran una funcion que recorre el arbol por su parte izquierda y tambien una funcion que recorre su parte derecha, teniendo una funcion auxiliar que servira para recorrer y sumar la cantidad de hijos que se presentan en cada lado respectivo.
+Con esto podemos calcular la cantidad de personas que se encuentran. Esta funcion recorre el arbol por su parte izquierda y tambien existe una funcion que recorre su parte derecha, teniendo una funcion auxiliar que servira para recorrer y sumar la cantidad de hijos que se presentan en cada lado respectivo.
 
 - Velocidad Persona por Hora
 
@@ -211,7 +211,7 @@ Una vez cargado el código nos arroja las imágenes presentadas como ejemplo,enc
 
 ## 4. Conclusiones
 
-Analizando el trabajio realizado, se da cuenta de que los objetivos se cumplen en su totalidad, si bien, tiene muchas mejoras en la realizacion de este codigo, pudiendo optimizarlo de una mejor manera, se logra una buena organizacion con los tiempos estimados y un buen desarrollo de este trabajo. Ademas se presenta una uena interacción con la IDE y la librería OpenCV, lo cual sirve como experiencia y aprender mas sobre el manejo de otro tipo de lenguaje que en el mundo laboral me servirá para afrontar cualquier tipo de desafíos relacionados a la lectura de Personas.
+Analizando el trabajo realizado, se da cuenta de que los objetivos se cumplen en su totalidad, si bien, tiene muchas mejoras en la realizacion de este codigo, pudiendo optimizarlo de una mejor manera, se logra una buena organizacion con los tiempos estimados y un buen desarrollo de este trabajo. Ademas se presenta una uena interacción con la IDE y la librería OpenCV, lo cual sirve como experiencia y aprender mas sobre el manejo de otro tipo de lenguaje que en el mundo laboral me servirá para afrontar cualquier tipo de desafíos relacionados a la lectura de Personas.
 
 # Anexos
 
